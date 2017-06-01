@@ -4,6 +4,13 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 
+	<display-name>Archetype Created Web Application</display-name>
+	
+	<!-- 指定spring的文件位置 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/spring.xml</param-value>
+	</context-param>
 
 	<filter>
 		<description>struts2的过滤器</description>
@@ -11,5 +18,17 @@
 		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
 	</filter>
 
-  <display-name>Archetype Created Web Application</display-name>
+	<filter-mapping>
+		<filter-name>strutsPrepared</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
 </web-app>

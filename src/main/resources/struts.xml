@@ -4,6 +4,13 @@
 	"http://struts.apache.org/dtds/struts-2.5.dtd">
 	
 <struts>
+	<package name="default" extends="struts-default">
 	
-
+	</package>
+	
+	<package name="user" extends="default" namespace="/user">
+		<action name="login" class="action.UserAction" method="toLogin">
+			<result name="login" >/index.jsp</result>
+		</action>
+	</package>
 </struts>

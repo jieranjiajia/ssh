@@ -1,5 +1,16 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html>
 <html>
-<body>
-<h2>Hello World!</h2>
-</body>
+	<head>
+		<meta charset="utf-8" />
+		<title>登录</title>
+	</head>
+	<body>
+		<form action="" method="post">
+		登录名：<input type="text" name="user.name" ><br>
+		密    码：<input type="text" name="user.password">
+		</form>
+		
+	</body>
 </html>
+

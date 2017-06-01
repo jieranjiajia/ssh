@@ -25,6 +25,9 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 		}
 	}
 	
+	/**
+	 * 初始化泛型类
+	 */
 	private void init() {
 		Class<? extends BaseDAOImpl> clazz = getClass();
 		Type genType = clazz.getGenericSuperclass();
