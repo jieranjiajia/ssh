@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping >
+	<class name="model.Role" table="role">
+		<id column="id" name="id">
+			<generator class="native"></generator>
+		</id>
+		<property name="name" column="name" type="string"></property>
+		<property name="description" column="description" type="string"></property>
+		<property name="status" column="status" type="integer"></property>
+		<set name="users" table="user_role" inverse="true">
+			<key column="roleid"></key>
+			<many-to-many class="model.User" column="userid"></many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

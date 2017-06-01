@@ -4,5 +4,12 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 
+
+	<filter>
+		<description>struts2的过滤器</description>
+		<filter-name>strutsPrepared</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+
   <display-name>Archetype Created Web Application</display-name>
 </web-app>
