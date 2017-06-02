@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 
 /**
- * Ê¹ÓÃhibernateµÄ×¢½â·½Ê½ÅäÖÃ³Ö¾Ã»¯Ó³Éä
+ * Ê¹ï¿½ï¿½hibernateï¿½ï¿½×¢ï¿½â·½Ê½ï¿½ï¿½ï¿½Ã³Ö¾Ã»ï¿½Ó³ï¿½ï¿½
  */
 @Entity
 @Table(name="ROLE")
@@ -22,20 +22,20 @@ public class Role implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7866268301527913501L;
-	/**Ö÷¼ü*/
+	/**ï¿½ï¿½ï¿½ï¿½*/
 	private Integer id;
-	/**½ÇÉ«Ãû³Æ*/
+	/**ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½*/
 	private String name;
-	/**½ÇÉ«ÃèÊö*/
+	/**ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½*/
 	private String description;
-	/**ÅÅÐò*/
+	/**ï¿½ï¿½ï¿½ï¿½*/
 	private Integer seq;
 	/**×´Ì¬*/
 	private Integer status;
 	
 	private Set<User> users = new HashSet<User>();
 	
-	/*ÅäÖÃuuid²ßÂÔ
+	/*ï¿½ï¿½ï¿½ï¿½uuidï¿½ï¿½ï¿½ï¿½
 	 *  javax.persistence.GeneratedValue;
 	 *	@GenericGenerator(name="paymentableGenerator",strategy="uuid")
 	 *  org.hibernate.annotations.GenericGenerator
@@ -82,7 +82,7 @@ public class Role implements Serializable {
 	}
 	
 	/**
-	 * ÅäÖÃ¶à¶Ô¶àµÄ¹ØÁªÓ³Éä
+	 * ï¿½ï¿½ï¿½Ã¶ï¿½Ô¶ï¿½Ä¹ï¿½ï¿½ï¿½Ó³ï¿½ï¿½
 	 */
 	@ManyToMany(mappedBy="roles")
 	public Set<User> getUsers() {
