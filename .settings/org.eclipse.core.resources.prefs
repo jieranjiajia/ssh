@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/resources/conf/jdbc.properties=UTF-8
+encoding//src/main/resources/readme.md=GBK
 encoding//src/main/resources/sql/create_table.sql=UTF-8
 encoding//src/main/webapp/index.jsp=UTF-8

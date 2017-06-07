@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+    
+    <!-- 配置druid数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${driverclass}"></property>
+		<property name="url" value="${jdbcurl}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="initialSize" value="${initialSize}" />
+		<property name="minIdle" value="${minIdle}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<property name="validationQueryTimeout" value="${validationQueryTimeout}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" 
+				  value="${maxPoolPreparedStatementPerConnectionSize}" />
+	</bean>
+    
+    
+    <!-- 会话工厂，可以获得会话，有对hibernate的支持，与自己写的HibernateUtil工具功能类似 -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource"></property>
+    	<!-- configLocation 是只hibernate.cfg.xml文件的位置 -->
+    	<!-- 扫描注解的方式，扫描@Entity的注解，相当于初始化hibernate环境 -->
+    	<property name="packagesToScan" value="org.study.model"></property>
+    	<!-- 指定mapping文件的位置 -->
+    	<!-- <property name="mappingDirectoryLocations">
+    		<list>
+    			<value>classpath:hibernate/mapping</value>
+    		</list>
+    	</property> -->
+    	<!-- 配置hibernate的一些属性 -->
+    	<property name="hibernateProperties">
+    		<props>
+    			<prop key="hibernate.show_sql">true</prop>
+    			<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+    		</props>
+    	</property>
+    </bean>
+    
+    <!-- 配置申明式事务 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <!-- 定义事务通知 -->
+    <tx:advice id="advice" transaction-manager="transactionManager">
+    	<tx:attributes>
+    		<tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+    		<tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+    		<tx:method name="*"/>
+    	</tx:attributes>
+    </tx:advice>
+    
+    <!-- 定义事务切面 -->
+    <aop:config>
+    	<!-- 定义切点 -->
+    	<aop:pointcut expression="execution(* service.*.*(..))" id="pointcut"/>
+    	<aop:advisor advice-ref="advice" pointcut-ref="pointcut"/>
+    </aop:config>
+    
+    <!-- spring对hibernate的支持 -->
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+    	<property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+ 
+    
+</beans>

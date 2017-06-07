@@ -1,4 +1,4 @@
-package dao;
+package org.study.dao;
 
 import java.io.Serializable;
 

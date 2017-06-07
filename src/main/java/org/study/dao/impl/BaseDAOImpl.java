@@ -1,4 +1,4 @@
-package dao.impl;
+package org.study.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -6,9 +6,8 @@ import java.lang.reflect.Type;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.springframework.stereotype.Repository;
+import org.study.dao.BaseDAO;
 
-import dao.BaseDAO;
 
 @SuppressWarnings("all")
 public abstract class BaseDAOImpl<T> implements BaseDAO<T> {

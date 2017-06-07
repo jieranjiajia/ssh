@@ -2,6 +2,15 @@
 1.先同过maven依赖相关的jar包，hibernate的相关配置属性在etc文件下有一个hibernate.properties的文件
 2.创建hibernate.cfg.xml，也可以在spring中配置hibernate的相关配置
 
+介绍hibernate：
+重点：hibernate有5个核心接口
+1.Session接口     			负责被持久化对象的crud操作，注意这个session是非线程安全的，与httpsession不同
+2.SessionFactory接口		负责hibernate的初始化环境，比如数据存储源的代理，创建session，并且这个是重量级的，最好是只初始化一次
+3.Configuration接口		负责配置并启动hibernate，加载配置文件，创建SessionFactory对象
+4.Transaction接口		负责事务管理
+5.Query和Criteria接口	负责各种数据库的查询，有HQL或SQL语句两种查询方式
+
+
 注意事项：
 1.使用hibernate框架的好处以及它的缺点	
 	a）注意要知道在哪里找相关配置文件的属性，整理好要讲课的内容，以及文件

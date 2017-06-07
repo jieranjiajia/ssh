@@ -1,0 +1,11 @@
+html{
+	height: 100%;
+}
+body {
+	background: url("../images/login-background.jpg") no-repeat;
+}
+.login-div{
+	margin: 100px 500px;
+	width: 500px;
+	height: 300px;
+}

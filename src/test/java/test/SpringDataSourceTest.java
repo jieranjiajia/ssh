@@ -2,10 +2,8 @@ package test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import dao.impl.UserDAOImpl;
-import model.User;
-
+import org.study.dao.impl.UserDAOImpl;
+import org.study.model.User;
 
 public class SpringDataSourceTest extends BaseTest{
 
