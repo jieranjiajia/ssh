@@ -47,5 +47,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 	public void setEntityClass(Class entityClass) {
 		this.entityClass = entityClass;
 	}
+
+	public HibernateTemplate getHibernateTemplate() {
+		return hibernateTemplate;
+	}
+	
+	
 	
 }

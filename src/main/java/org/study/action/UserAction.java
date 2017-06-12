@@ -1,9 +1,19 @@
 package org.study.action;
 
+import org.study.common.Contants;
 import org.study.common.utils.StringUtils;
 import org.study.model.User;
 
 import com.opensymphony.xwork2.ActionSupport;
+
+import java.util.Objects;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 
 /**
@@ -36,22 +46,36 @@ public class UserAction extends ActionSupport {
 	/* 处理登录的操作 */
 	public String dologin() {
 		//第一步：检验验证码
-		HttpSession session = ServletActionContext.getRequest().getSession();
+		if(checkCode()) {
+			addActionError("验证码输入错误！");
+			return LOGIN;
+		} 
 		
 		//第二步：使用shiro进行登录验证操作
-
+		try {
+			UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
+			Subject subject = SecurityUtils.getSubject();
+			subject.login(token);
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 
 	/**
-	 *
+	 * 验证验证码的正确性
      */
 	public boolean checkCode() {
-		if(StringUtils.isBlank(checkCode)) {
-			return false;
-		} else {
-			
-			
+		if(StringUtils.isNotBlank(checkCode)){
+			HttpSession session = ServletActionContext.getRequest().getSession();
+			String sessionCode = (String)session.getAttribute(Contants.CHECK_CODE);
+			if(Objects.equals(checkCode, sessionCode)){
+				return true;
+			}
 		}
+		return false;
 	}
 
 	//-----------getter setter methods------------

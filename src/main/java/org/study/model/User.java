@@ -1,9 +1,10 @@
 package org.study.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -42,7 +44,7 @@ public class User implements Serializable {
 	private Date createTime;
 	private Integer status;
 	
-	private List<Role> roles = new ArrayList<Role>();
+	private Set<Role> roles = new HashSet<Role>();
 	
 	@Id
 	@Column(name="ID")
@@ -103,16 +105,29 @@ public class User implements Serializable {
 	@JoinTable(name="USER_ROLE",
 				joinColumns=@JoinColumn(name="USERID"),
 				inverseJoinColumns=@JoinColumn(name="ROLEID"))
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", salt=" + salt + ", loginName=" + loginName + ", password=" + password + ", email="
 				+ email + ", createTime=" + createTime + ", status=" + status + ", roles=" + roles + "]";
+	}
+	
+	@Transient
+	public Set<String> getRolesString() {
+		Set<String> _roles = new HashSet<String>();
+		
+		for(Iterator<Role> it = this.roles.iterator();
+				it.hasNext();) {
+			Role role = it.next();
+			_roles.add(role.getRoleName());
+		}
+		
+		return _roles;
 	}
 	
 }

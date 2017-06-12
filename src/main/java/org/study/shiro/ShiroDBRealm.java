@@ -7,8 +7,13 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.study.dao.UserDAO;
 
 public class ShiroDBRealm extends AuthorizingRealm {
+	
+	
+	@Autowired UserDAO userDAO;
 
 	/** shiro的授权
 	 * 
