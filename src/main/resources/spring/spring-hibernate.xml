@@ -32,9 +32,13 @@
     <!-- 会话工厂，可以获得会话，有对hibernate的支持，与自己写的HibernateUtil工具功能类似 -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     	<property name="dataSource" ref="dataSource"></property>
-    	<!-- configLocation 是只hibernate.cfg.xml文件的位置 -->
+    	<!-- configLocation 是指hibernate.cfg.xml文件的位置 -->
     	<!-- 扫描注解的方式，扫描@Entity的注解，相当于初始化hibernate环境 -->
-    	<property name="packagesToScan" value="org.study.model"></property>
+    	<property name="packagesToScan" >
+    		<list>
+    			<value>org.study.model</value>
+    		</list>
+    	</property>
     	<!-- 指定mapping文件的位置 -->
     	<!-- <property name="mappingDirectoryLocations">
     		<list>
@@ -45,10 +49,15 @@
     	<property name="hibernateProperties">
     		<props>
     			<prop key="hibernate.show_sql">true</prop>
+    			<prop key=".current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
     			<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
     		</props>
     	</property>
     </bean>
+    
+    <!-- 配置事物异常封装 -->
+    <bean id="persistenceExceptionTranslationPostProcessor" 
+    	class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"></bean>
     
     <!-- 配置申明式事务 -->
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
@@ -60,21 +69,15 @@
     	<tx:attributes>
     		<tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
     		<tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
-    		<tx:method name="*"/>
+    		<tx:method name="*" propagation="REQUIRED"/>
     	</tx:attributes>
     </tx:advice>
     
     <!-- 定义事务切面 -->
-    <aop:config>
+    <aop:config proxy-target-class="true">
     	<!-- 定义切点 -->
-    	<aop:pointcut expression="execution(* service.*.*(..))" id="pointcut"/>
+    	<aop:pointcut expression="execution(* org.study.service.*.*(..))" id="pointcut"/>
     	<aop:advisor advice-ref="advice" pointcut-ref="pointcut"/>
     </aop:config>
-    
-    <!-- spring对hibernate的支持 -->
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
-    	<property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
- 
     
 </beans>

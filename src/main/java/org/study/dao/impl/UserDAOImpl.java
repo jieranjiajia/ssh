@@ -7,14 +7,13 @@ import org.study.dao.UserDAO;
 import org.study.model.User;
 
 
-@Repository("uerDAO")
-public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO<User> {
+@Repository("userDAO")
+public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 
 	@Override
 	public User getUserByName(String loginname) {
 		String hql = "from User u where u.loginName = ?";
-		@SuppressWarnings("unchecked")
-		List<User> users = (List<User>) this.getHibernateTemplate().find(hql, loginname);
+		List<User> users = (List<User>) getByProperty(hql, loginname);
 		return null != users && users.size() > 0 ? users.get(0) : null;
 	}
 

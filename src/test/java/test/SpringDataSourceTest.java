@@ -2,17 +2,19 @@ package test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.study.dao.impl.UserDAOImpl;
 import org.study.model.User;
+import org.study.service.UserService;
 
 public class SpringDataSourceTest extends BaseTest{
 
-	@Autowired
-	private UserDAOImpl userDAO;
+	@Autowired private UserService userService;
 	
+		
 	@Test
-	public void test() {
-		User user = userDAO.getById(1);
+	public void test1() {
+		String loginName="oqs";
+		User user = userService.getUserByLoginName(loginName);
 		System.out.println(user);
 	}
+	
 }
