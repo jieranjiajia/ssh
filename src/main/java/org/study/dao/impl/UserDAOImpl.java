@@ -17,4 +17,6 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 		return null != users && users.size() > 0 ? users.get(0) : null;
 	}
 
+	
+
 }

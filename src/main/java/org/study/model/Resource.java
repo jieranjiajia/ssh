@@ -110,8 +110,11 @@ public class Resource implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	
-	
-	
+	@Override
+	public String toString() {
+		return "Resource [id=" + id + ", name=" + name + ", url=" + url + ", openMode=" + openMode + ", description="
+				+ description + ", pid=" + pid + ", seq=" + seq + ", status=" + status + ", resourceType="
+				+ resourceType + ", createTime=" + createTime + "]";
+	}
 	
 }

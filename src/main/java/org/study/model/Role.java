@@ -29,7 +29,10 @@ public class Role implements Serializable {
 	private Integer seq;
 	private Integer status;
 	
+	/** 一个角色对应的多个用户 */
 	private List<User> users = new ArrayList<User>();
+	/** 角色对应的资源 */
+	//private Set<Resource> resources = new HashSet<Resource>();
 	
 	public Role() {
 		
@@ -91,6 +94,18 @@ public class Role implements Serializable {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+	
+	/*@ManyToMany(targetEntity=Resource.class,fetch=FetchType.EAGER)
+	@JoinTable(name="ROLE_RESOURCE",
+				joinColumns=@JoinColumn(name="ROLEID"),
+				inverseJoinColumns=@JoinColumn(name="RESOURCEID"))
+	public Set<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(Set<Resource> resources) {
+		this.resources = resources;
+	}*/
 
 	@Override
 	public String toString() {
