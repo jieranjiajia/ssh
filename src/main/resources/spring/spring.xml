@@ -32,6 +32,6 @@
     
     <!-- 加入hibernate配置的文件 -->
     <import resource="spring-hibernate.xml"/>
-    
+   <!--  <import resource="spring-shiro.xml"/> -->
     
 </beans>

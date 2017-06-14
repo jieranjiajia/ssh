@@ -30,18 +30,33 @@
     <!-- 对于WebLogic,Orion,OC4J此属性应该设置成true -->
     <constant name="struts.dispatcher.parametersWorkaround" value="false" />
 
-
+	<!-- 默认包 -->
 	<package name="default" extends="struts-default">
-	
+		<!-- 全局结果配置 -->
+		<global-results>
+			<result name="login">/login.jsp</result>
+			<result name="error">/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="login" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
 	</package>
 	
 	<package name="user" extends="default" namespace="/user">
 		<action name="login" class="org.study.action.UserAction" method="toLogin">
-			<result name="login" >/login.jsp</result>
+			<result name="success" >/login.jsp</result>
 		</action>
 		<action name="dologin" class="org.study.action.UserAction" method="dologin">
-			<result name="sucess" type="forword"></result>
+			<result name="login">/login.jsp</result>
+			<result name="sucess" type="redirectAction">/domain/index</result>
 		</action>
+	</package>
+	
+	<package name="auth" extends="default" namespace="/domain">
+		<aciton name="index"  class="" method="">
+			<result>/WEB-INF/index.jsp</result>
+		</aciton>
+		
 	</package>
 	
 	<package name="checkCode" extends="default" namespace="/">

@@ -2,14 +2,19 @@ package org.study.shiro;
 
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.SimpleByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,9 @@ import org.study.model.User;
 import org.study.service.ResourceService;
 import org.study.service.UserService;
 
+/**
+ * 实现自定义的shiro认证realm
+ */
 public class ShiroDBRealm extends AuthorizingRealm {
 	
 	protected static final Logger log = LoggerFactory.getLogger(ShiroDBRealm.class);
@@ -24,6 +32,14 @@ public class ShiroDBRealm extends AuthorizingRealm {
 	/** 注入service服务 */
 	@Autowired UserService userService;
 	@Autowired ResourceService resourceService;
+	
+	/**
+	 * 带有凭证认证器的构造方法
+	 * @param matcher
+	 */
+	public ShiroDBRealm(CredentialsMatcher matcher) {
+		super(matcher);
+	}
 	
 	/** 
 	 * shiro的授权
@@ -60,10 +76,10 @@ public class ShiroDBRealm extends AuthorizingRealm {
 		/*设置用户能够访问的URL*/
 		shiroUser.setUrlSet(urls);
 		
-		return new SimpleAuthenticationInfo(shiroUser,      //认证身份
+		return new SimpleAuthenticationInfo(shiroUser,       //认证身份
 										user.getPassword(),   //认证凭证
-										user.getSalt(),     //加密盐值
+										new SimpleByteSource(user.getSalt() + user.getLoginName()),     //加密盐值
 										getName());          //roleName
 	}
-
+	
 }

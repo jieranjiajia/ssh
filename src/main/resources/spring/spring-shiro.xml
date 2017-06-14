@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<description>spring与shiro集成的配置</description>
+	<!-- 第一步：配置默认的安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 数据验证的域 -->
+		<property name="realm" ref="shiroRealm"></property>
+		<!-- sessionManager 会话管理 -->
+		<property name="sessionManager" ref="sessionManager"></property>
+		<!-- 应用缓存管理 -->
+		<property name="cacheManager" ref="shiroCacheManager"></property>
+	</bean>
+
+	<!-- 自定的验证域，这个是从数据库进行验证，也可以是别的验证 -->
+	<bean id="shiroRealm" class="org.study.shiro.ShiroDBRealm">
+		<constructor-arg index="0" ref="credentialsMatcher"></constructor-arg>
+	</bean>
+
+	<!-- session管理器 -->
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- 超时时间 -->
+		<property name="globalSessionTimeout" value="1800000" />
+		<!-- session存储的实现 -->
+		<property name="sessionDAO" ref="shiroSessionDao" />
+		<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+		<property name="sessionIdCookie" ref="sharesession" />
+		<!-- 定时检查失效的session -->
+		<property name="sessionValidationSchedulerEnabled" value="true" />
+	</bean>
+
+	<!-- 单机session -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+
+	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+	<bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<!-- cookie的name,对应的默认是 JSESSIONID -->
+		<constructor-arg name="name" value="SHAREJSESSIONID" />
+	</bean>
+	<!-- session存储的实现 -->
+	<bean id="shiroSessionDao"
+		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO" />
+
+	<!-- 配置shiroFilter，并且这个名字要和web.xml中的shiroFilter过滤器的filter-name一致 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 安全管理器 -->
+		<property name="securityManager" ref="securityManager"></property>
+		<!-- 默认的登陆访问url -->
+		<property name="loginUrl" value="/user/login.do" />
+		<!-- 登陆成功后跳转的url -->
+		<property name="successUrl" value="/domain/index.do" />
+		<!-- 没有权限跳转的url -->
+        <property name="unauthorizedUrl" value="/unauth"/>
+        <property name="filterChainDefinitions">
+	      <value> 
+	      		<!-- 
+                    anon  不需要认证
+                    authc 需要认证
+                    user  验证通过或RememberMe登录的都可以
+                -->
+             / = user
+	         /commons/** = anon
+	         /js/** = anon
+	         /css/** = anon
+	         /images/** = anon
+	         /user/login.do* = anon
+	         /user/dologin.do* = anon
+	         /user/logout.do* = anon
+	         /** = user 
+	      </value> 
+	   </property> 
+        
+	</bean>
+
+	<!-- 验证器配置 -->
+	<bean id="credentialsMatcher" class="org.study.shiro.MyCredentialsMatcher">
+		<constructor-arg name="passwordHash" ref="passwordHash"></constructor-arg>
+	</bean>
+
+	<!-- 进行配置密码加强 配置SHA-1的加密方式，迭代5次 -->
+	<bean id="passwordHash" class="org.study.shiro.PasswordHash">
+		<property name="algorithmName" value="SHA-1"></property>
+		<property name="hashIterations" value="5"></property>
+	</bean>
+
+</beans>

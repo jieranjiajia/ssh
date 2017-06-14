@@ -11,7 +11,9 @@ import java.util.Objects;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
@@ -40,7 +42,7 @@ public class UserAction extends ActionSupport {
 	 * 去往登陆操作
 	 */
 	public String toLogin() {
-		return "login";
+		return SUCCESS;
 	}
 
 	/* 处理登录的操作 */
@@ -56,16 +58,27 @@ public class UserAction extends ActionSupport {
 			UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
 			Subject subject = SecurityUtils.getSubject();
 			subject.login(token);
-		} catch (AuthenticationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			token.setRememberMe(true);
+		} catch (UnknownAccountException e) {
+			//帐号不存在
+			addActionError("帐号不存在");
+			return LOGIN;
+		} catch (DisabledAccountException e) {
+			addActionError("帐号为启用");
+			return LOGIN;
+		} catch (IncorrectCredentialsException e) {
+			addActionError("用户名或密码错误");
+			return LOGIN;
+		} catch (Throwable e) {
+			addActionError("系统未知错误");
+			return LOGIN;
 		}
 		
-		return "";
+		return SUCCESS;
 	}
 
 	/**
-	 * 验证验证码的正确性
+	 * 验证输入的验证码
      */
 	public boolean checkCode() {
 		if(StringUtils.isNotBlank(checkCode)){
