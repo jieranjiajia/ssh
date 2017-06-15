@@ -55,7 +55,7 @@
 		<!-- 安全管理器 -->
 		<property name="securityManager" ref="securityManager"></property>
 		<!-- 默认的登陆访问url -->
-		<property name="loginUrl" value="/user/login.do" />
+		<property name="loginUrl" value="/login.jsp" />
 		<!-- 登陆成功后跳转的url -->
 		<property name="successUrl" value="/domain/index.do" />
 		<!-- 没有权限跳转的url -->
@@ -75,6 +75,7 @@
 	         /user/login.do* = anon
 	         /user/dologin.do* = anon
 	         /user/logout.do* = anon
+	         /checkCode* = anon
 	         /** = user 
 	      </value> 
 	   </property> 

@@ -2,11 +2,10 @@ package org.study.action;
 
 import org.study.common.Contants;
 import org.study.common.utils.StringUtils;
+import org.study.exception.LoginException;
 import org.study.model.User;
 
 import com.opensymphony.xwork2.ActionSupport;
-
-import java.util.Objects;
 
 import javax.servlet.http.HttpSession;
 
@@ -47,8 +46,13 @@ public class UserAction extends ActionSupport {
 
 	/* 处理登录的操作 */
 	public String dologin() {
+		boolean isEmptyData = user == null || StringUtils.isBlank(user.getLoginName()) || StringUtils.isBlank(user.getPassword());
+		if(isEmptyData) {
+			addActionError("用户名或密码为空！");
+			return LOGIN;
+		}
 		//第一步：检验验证码
-		if(checkCode()) {
+		if(!checkCode()) {
 			addActionError("验证码输入错误！");
 			return LOGIN;
 		} 
@@ -56,35 +60,30 @@ public class UserAction extends ActionSupport {
 		//第二步：使用shiro进行登录验证操作
 		try {
 			UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
+			token.setRememberMe(true);
 			Subject subject = SecurityUtils.getSubject();
 			subject.login(token);
-			token.setRememberMe(true);
 		} catch (UnknownAccountException e) {
 			//帐号不存在
-			addActionError("帐号不存在");
-			return LOGIN;
+			throw new LoginException("帐号不存在",e);
 		} catch (DisabledAccountException e) {
-			addActionError("帐号为启用");
-			return LOGIN;
+			throw new LoginException("帐号未启用",e);
 		} catch (IncorrectCredentialsException e) {
-			addActionError("用户名或密码错误");
-			return LOGIN;
+			throw new LoginException("用户名或密码错误",e);
 		} catch (Throwable e) {
-			addActionError("系统未知错误");
-			return LOGIN;
+			throw new LoginException("系统未知错误",e);
 		}
-		
 		return SUCCESS;
 	}
 
 	/**
-	 * 验证输入的验证码
+	 * 验证输入的验证码，输入正确return true，错误return false
      */
 	public boolean checkCode() {
 		if(StringUtils.isNotBlank(checkCode)){
 			HttpSession session = ServletActionContext.getRequest().getSession();
 			String sessionCode = (String)session.getAttribute(Contants.CHECK_CODE);
-			if(Objects.equals(checkCode, sessionCode)){
+			if(checkCode.equalsIgnoreCase(sessionCode)) {
 				return true;
 			}
 		}

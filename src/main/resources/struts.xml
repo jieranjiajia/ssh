@@ -37,9 +37,9 @@
 			<result name="login">/login.jsp</result>
 			<result name="error">/error.jsp</result>
 		</global-results>
-		<global-exception-mappings>
-			<exception-mapping result="login" exception="java.lang.Exception"></exception-mapping>
-		</global-exception-mappings>
+		<!-- <global-exception-mappings>
+			<exception-mapping result="login" exception="org.study.exception.LoginException"></exception-mapping>
+		</global-exception-mappings> -->
 	</package>
 	
 	<package name="user" extends="default" namespace="/user">
@@ -48,14 +48,17 @@
 		</action>
 		<action name="dologin" class="org.study.action.UserAction" method="dologin">
 			<result name="login">/login.jsp</result>
-			<result name="sucess" type="redirectAction">/domain/index</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">index</param>
+				<param name="namespace">/domain</param>
+			</result>
 		</action>
 	</package>
 	
 	<package name="auth" extends="default" namespace="/domain">
-		<aciton name="index"  class="" method="">
+		<action name="index"  class="org.study.action.DomainAction" method="domain">
 			<result>/WEB-INF/index.jsp</result>
-		</aciton>
+		</action>
 		
 	</package>
 	

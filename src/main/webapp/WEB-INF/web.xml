@@ -12,13 +12,9 @@
 		<param-value>classpath:spring/spring.xml</param-value>
 	</context-param>
 
-	<filter>
-		<description>struts2的过滤器</description>
-		<filter-name>strutsPrepared</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
-	</filter>
-
-	<!--Shiro过滤器 -->
+	<!--Shiro过滤器 
+		注意shiro的过滤器要在struts2的过滤器前面
+	-->
 	<filter>
 		<filter-name>shiroFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -28,10 +24,12 @@
 		</init-param>
 	</filter>
 
-	<filter-mapping>
+	<filter>
+		<description>struts2的过滤器</description>
 		<filter-name>strutsPrepared</filter-name>
-		<url-pattern>*.do</url-pattern>
-	</filter-mapping>
+		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+
 
 	<filter-mapping>
 		<filter-name>shiroFilter</filter-name>
@@ -42,6 +40,10 @@
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
 
+	<filter-mapping>
+		<filter-name>strutsPrepared</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
 
 	<!-- spring监听器 -->
 	<listener>

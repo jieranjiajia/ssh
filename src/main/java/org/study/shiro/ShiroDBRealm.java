@@ -2,16 +2,14 @@ package org.study.shiro;
 
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.SimpleByteSource;
@@ -45,9 +43,11 @@ public class ShiroDBRealm extends AuthorizingRealm {
 	 * shiro的授权
 	 */
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		ShiroUser shiroUser = (ShiroUser)principals.getPrimaryPrincipal();
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(shiroUser.getRoles());
+		info.addStringPermissions(shiroUser.getRoles());
+		return info;
 	}
 
 	/**
@@ -71,6 +71,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
 		if(user.getStatus() != 0) {
 			return null;
 		}
+		//通过数据库查询出来的user来构造一个shiro中可以携带更多信息的user
 		ShiroUser shiroUser = new ShiroUser(user);
 		Set<String> urls = resourceService.getUrlsByUserid(shiroUser.getId());
 		/*设置用户能够访问的URL*/
