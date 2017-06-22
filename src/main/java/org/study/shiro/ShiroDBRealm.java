@@ -2,6 +2,7 @@ package org.study.shiro;
 
 import java.util.Set;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -11,11 +12,13 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.SimpleByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.study.common.Contants;
 import org.study.model.User;
 import org.study.service.ResourceService;
 import org.study.service.UserService;
@@ -73,6 +76,8 @@ public class ShiroDBRealm extends AuthorizingRealm {
 		}
 		//通过数据库查询出来的user来构造一个shiro中可以携带更多信息的user
 		ShiroUser shiroUser = new ShiroUser(user);
+		Session session = SecurityUtils.getSubject().getSession();
+		session.setAttribute(Contants.LOGIN_USER, user);
 		Set<String> urls = resourceService.getUrlsByUserid(shiroUser.getId());
 		/*设置用户能够访问的URL*/
 		shiroUser.setUrlSet(urls);

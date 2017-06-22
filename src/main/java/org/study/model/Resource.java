@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 @Entity
 @Table(name="RESOURCE")
 public class Resource implements Serializable {
@@ -34,6 +36,7 @@ public class Resource implements Serializable {
 	/** 资源类别 */
 	private String resourceType;
 	/** 创建时间 */
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	
 	

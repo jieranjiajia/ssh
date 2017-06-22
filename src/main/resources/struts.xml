@@ -59,7 +59,7 @@
 		<action name="index"  class="org.study.action.DomainAction" method="domain">
 			<result>/WEB-INF/index.jsp</result>
 		</action>
-		
+		<action name="indexZtree" class="org.study.action.DomainAction" method="initZtree"></action>
 	</package>
 	
 	<package name="checkCode" extends="default" namespace="/">

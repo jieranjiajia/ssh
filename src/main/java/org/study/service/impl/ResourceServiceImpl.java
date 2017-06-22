@@ -16,9 +16,8 @@ public class ResourceServiceImpl implements ResourceService {
 	@Resource(name="resourceDAO") private ResourceDAO resourceDAO;
 	
 	@Override
-	public Set<org.study.model.Resource> getResourceByUserid(Integer userid) {
-		List<org.study.model.Resource> resources = resourceDAO.getResourceByUserid(userid);
-		return new HashSet<org.study.model.Resource>(resources);
+	public List<org.study.model.Resource> getResourceByUserid(Integer userid) {
+		return  resourceDAO.getResourceByUserid(userid);
 	}
 
 	/**
@@ -26,7 +25,7 @@ public class ResourceServiceImpl implements ResourceService {
 	 */
 	@Override
 	public Set<String> getUrlsByUserid(Integer userid) {
-		Set<org.study.model.Resource> resources = getResourceByUserid(userid);
+		Set<org.study.model.Resource> resources = new HashSet<org.study.model.Resource>(getResourceByUserid(userid));
 		Set<String> sets = new HashSet<String>();
 		for(org.study.model.Resource r : resources) {
 			sets.add(r.getUrl());

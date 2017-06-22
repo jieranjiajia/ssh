@@ -12,7 +12,7 @@
 		$(function(){
 			var $form = $("form").eq(0);
 				//定义一个form表单
-				$form.form("submit",{
+				/* $form.form("submit",{
 					url : '${ctx}/user/dologin.do',
 					//表单提交之前触发
 					onSubmit : function() {
@@ -29,15 +29,20 @@
 					success : function(data) {
 						alert(data);
 					}
-				});
+				}); */
 			$("#btn-submit").click(function(){
-				$form.submit();
-			});
-			$form.find("input").on("keyup",function(event){
-				if(event.keyCode == 13) {
+				//利用jqueryeasyui的表单验证
+				var validateResult = $form.form("validate");
+				alert(validateResult);
+				if(validateResult) {
 					$form.submit();
 				}
 			});
+			/* $form.find("input").on("keyup",function(event){
+				if(event.keyCode == 13) {
+					$form.submit();
+				}
+			}); */
 			
 		});
 
@@ -49,7 +54,7 @@
 	</script>
 	<body>
 		<div class="login-div" >
-			<form method="post" width="400px" height="300px">
+			<form method="post" action="${ctx}/user/dologin.do" width="400px" height="300px">
 				用户名：<input type="text" name="user.loginName" class="easyui-validatebox" data-options="required:true"><br/>
 				密&nbsp;&nbsp;&nbsp;码：<input type="password" name="user.password" class="easyui-validatebox" data-options="required:true"><br/>
 				验证码：<input type="text" name="checkCode" class="easyui-validatebox" data-options="required:true" value=""><img title="点击刷新验证吗" src="${ctx}/checkCode.do" onclick="this.src='${ctx}/checkCode.do?'+Math.random()"><br/>
@@ -58,7 +63,6 @@
 				&nbsp;&nbsp;
 				<input type="button" value="注册" />
 			</form>
-			<s:actionerror/>
 		</div>
 	</body>
 </html>
