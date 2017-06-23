@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/common/meta.jsp" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <html>
 <head>
     <title>主菜单页</title>
@@ -19,6 +20,7 @@
     		callback : {
     			onClick : zTreeOnclick
     		},
+    		/*设置简单格式的显示*/
     		data : {
     			simpleData : {
     				enable : true,
@@ -27,6 +29,7 @@
     				rootPId : null
     			}
     		},
+    		/*设置异步加载数据*/
     		async : {
     			enable : true,
     			dataType : "json",
@@ -46,11 +49,14 @@
     
     </script>
 </head>
-<body>
-
-	登录成功，进入菜单页面
-	<div>
-		<ul id="indexZtree" class="ztree" style="width:260px; overflow:auto;"></ul>
+<body class="easyui-layout" data-options="fit:true">
+	<div data-options="region:'north',split:true" style="height:100px;">
+		<p align="right" style="margin-right: 40px;">
+			<strong style="color: blue; font-size: 16px;">欢迎登录：</strong><i style="font-size: 18px;"><shiro:principal/></i>
+		</p>
+	</div>
+	<div data-options="region:'west',split:true" style="width: 260px;">
+		<ul id="indexZtree" class="ztree" style="width:220px; overflow:auto;"></ul>
 	</div>
 
 </body>

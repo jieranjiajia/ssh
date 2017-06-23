@@ -3,13 +3,11 @@ package org.study.action;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.study.common.BaseAction;
-import org.study.common.Contants;
 import org.study.model.Resource;
-import org.study.model.User;
 import org.study.service.ResourceService;
+import org.study.shiro.ShiroUser;
 
 import com.alibaba.fastjson.JSON;
 
@@ -29,8 +27,8 @@ public class DomainAction extends BaseAction {
 	 * 初始化左侧的ztree树形数据结构
 	 * @throws IOException 
 	 */
-	public void initZtree() throws IOException {
-		User user = (User)SecurityUtils.getSubject().getSession().getAttribute(Contants.LOGIN_USER);
+	public void initZtree() {
+		ShiroUser user = super.getLoginUser();
 		List<Resource> resourceByUserid = resourceService.getResourceByUserid(user.getId());
 		String json = JSON.toJSONString(resourceByUserid);
 		super.writeMessageToJsp(json);

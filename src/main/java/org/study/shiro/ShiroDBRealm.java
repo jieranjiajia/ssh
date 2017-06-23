@@ -87,7 +87,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
 		//通过数据库查询出来的user来构造一个shiro中可以携带更多信息的user
 		ShiroUser shiroUser = new ShiroUser(user);
 		Session session = SecurityUtils.getSubject().getSession();
-		session.setAttribute(Contants.LOGIN_USER, user);
+		session.setAttribute(Contants.LOGIN_USER, shiroUser);
 		Set<String> urls = resourceService.getUrlsByUserid(shiroUser.getId());
 		/*设置用户能够访问的URL*/
 		shiroUser.setUrlSet(urls);
