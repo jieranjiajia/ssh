@@ -21,8 +21,8 @@
 	</bean>
 
 	<!-- 自定的验证域，这个是从数据库进行验证，也可以是别的验证 -->
-	<bean id="shiroRealm" class="org.study.shiro.ShiroDBRealm">
-		<constructor-arg index="0" ref="credentialsMatcher"></constructor-arg>
+	<bean id="shiroRealm" class="org.study.shiro.ShiroDBRealm" init-method="initCredentialsMatcher">
+		<!-- <constructor-arg index="0" ref="credentialsMatcher"></constructor-arg> -->
 	</bean>
 
 	<!-- session管理器 -->
@@ -83,13 +83,13 @@
 	</bean>
 
 	<!-- 验证器配置 -->
-	<bean id="credentialsMatcher" class="org.study.shiro.MyCredentialsMatcher">
+	<!-- <bean id="credentialsMatcher" class="org.study.shiro.MyCredentialsMatcher">
 		<constructor-arg name="passwordHash" ref="passwordHash"></constructor-arg>
-	</bean>
+	</bean> -->
 
-	<!-- 进行配置密码加强 配置SHA-1的加密方式，迭代5次 -->
+	<!-- 进行配置密码加强 配置MD5的加密方式，迭代5次 -->
 	<bean id="passwordHash" class="org.study.shiro.PasswordHash">
-		<property name="algorithmName" value="SHA-1"></property>
+		<property name="algorithmName" value="MD5"></property>
 		<property name="hashIterations" value="5"></property>
 	</bean>
 

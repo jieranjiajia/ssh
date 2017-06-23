@@ -2,6 +2,8 @@ package org.study.shiro;
 
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -9,6 +11,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -33,6 +36,13 @@ public class ShiroDBRealm extends AuthorizingRealm {
 	/** 注入service服务 */
 	@Autowired UserService userService;
 	@Autowired ResourceService resourceService;
+	
+	@Autowired private PasswordHash passwordHash;
+	
+	/**
+	 * 无参构造方法
+	 */
+	public ShiroDBRealm() {	}
 	
 	/**
 	 * 带有凭证认证器的构造方法
@@ -86,6 +96,16 @@ public class ShiroDBRealm extends AuthorizingRealm {
 										user.getPassword(),   //认证凭证
 										new SimpleByteSource(user.getSalt() + user.getLoginName()),     //加密盐值
 										getName());          //roleName
+	}
+	
+	/**
+	 * 设置密码匹配器
+	 */
+	@PostConstruct
+	public void initCredentialsMatcher() {
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(passwordHash.getAlgorithmName());
+		matcher.setHashIterations(passwordHash.getHashIterations());
+		super.setCredentialsMatcher(matcher);
 	}
 	
 }

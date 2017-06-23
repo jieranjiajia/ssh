@@ -7,62 +7,98 @@
 		<meta charset="utf-8" />
 		<title>登录</title>
 		<link href="${ctx}/css/login.css" rel="stylesheet">
-	</head>
-	<script >
-		$(function(){
-			var $form = $("form").eq(0);
-				//定义一个form表单
-				/* $form.form("submit",{
-					url : '${ctx}/user/dologin.do',
-					//表单提交之前触发
-					onSubmit : function() {
-						var validateResult = $(this).form('enableValidation').form('validate');
-						if(!validateResult) {
-							$.messager.show({
-								title : "提示信息",
-								msg : "验证不通过，请重新填写数据"
-							});
-							return false;
-						}
-					},
-					//表单提交成功触发
-					success : function(data) {
-						alert(data);
+		<style type="text/css">
+		fi {
+			width: 100%;
+		}
+		</style>
+		<script >
+		/*清楚表单*/
+		function clearForm() {
+			$("form").eq(0).form("clear");
+		}
+		
+		/*ajax提交表单*/
+		function submitForm() {
+			var $loginForm = $("form").eq(0);
+			
+			$loginForm.form("submit",{
+				url : "${ctx}/user/dologin.do",
+				/*提交之前的验证*/
+				onSubmit : function() {
+					var validate = $(this).form("validate");
+					if(!validate) {
+						$.messager.alert({
+							title : "警告",
+							msg : "信息填写错误"
+						});
 					}
-				}); */
-			$("#btn-submit").click(function(){
-				//利用jqueryeasyui的表单验证
-				var validateResult = $form.form("validate");
-				alert(validateResult);
-				if(validateResult) {
-					$form.submit();
+					/*需要返回验证结果，阻止表单提交*/
+					return validate;
+				},
+				success : function (data) {
+					var jsonData = $.parseJSON(data);
+					if(jsonData.success) {
+						//加载成功跳转另一个页面
+						window.location.href="${ctx}/domain/index.do";
+					} else {
+						//给出提示警告
+						$.messager.alert({
+							title : "警告",
+							msg : jsonData.msg
+						});
+					}
 				}
 			});
-			/* $form.find("input").on("keyup",function(event){
-				if(event.keyCode == 13) {
-					$form.submit();
-				}
-			}); */
+		}
+		
+		/*将登录框居中*/
+		$(window).resize(function(){
+			var $div = $("#login-div");
+			var dw = $(window).width();
+			var w = $div.outerWidth();
+			var l = ( dw - w) / 2;
+			var dh = $(window).height();
+			var h = $div.outerHeight();
+			var t = (dh - h) / 2;
+			$div.css({
+				position : "absolute",
+				left : l,
+				top : t
+			})
+		});
+		
+		$(document).ready(function(){
+			
+			$(window).resize();
 			
 		});
-
 		
 		//自定义校验器
 		$.extend($.fn.validatebox.defaults.rules,{
 			
 		})
 	</script>
+	</head>
 	<body>
-		<div class="login-div" >
-			<form method="post" action="${ctx}/user/dologin.do" width="400px" height="300px">
-				用户名：<input type="text" name="user.loginName" class="easyui-validatebox" data-options="required:true"><br/>
-				密&nbsp;&nbsp;&nbsp;码：<input type="password" name="user.password" class="easyui-validatebox" data-options="required:true"><br/>
-				验证码：<input type="text" name="checkCode" class="easyui-validatebox" data-options="required:true" value=""><img title="点击刷新验证吗" src="${ctx}/checkCode.do" onclick="this.src='${ctx}/checkCode.do?'+Math.random()"><br/>
-
-				<input type="button" value="提交" id="btn-submit"/>
-				&nbsp;&nbsp;
-				<input type="button" value="注册" />
+		<div id="login-div" style="width: 100%; max-width: 400px;">
+		<div class="easyui-panel" title="登录" style="width: 100%; max-width: 400px; padding: 30px 60px;">
+			<form method="post" >
+				<div style="margin-bottom: 20px;">
+					<input class="fi easyui-textbox" name="user.loginName"  data-options="label:'用户名：',required:true"><br/>
+				</div>
+				<div style="margin-bottom: 20px;">
+					<input class="fi easyui-textbox" type="password" name="user.password" data-options="label:'密码：',required:true"><br/>
+				</div>
+				<!-- <div>
+					<input class="fi easyui-textbox" name="checkCode" data-options="label:'验证码：',required:true" >
+				</div> -->
 			</form>
+			<div style="text-align: center; padding: 5px 3px;">
+				<a href="javascript:void(0)" class="easyui-linkbutton" style="width: 40px;" onclick="submitForm()">提交</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" style="width: 40px;" onclick="clearForm()">清除</a>
+			</div>
+		</div>
 		</div>
 	</body>
 </html>

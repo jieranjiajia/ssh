@@ -30,7 +30,7 @@ public class DigestUtils {
 	}
 	
 	public static void main(String[] args) {
-		String hashByShiro = DigestUtils.hashByShiro("SHA-1", "123456", "testoqs", 5);
+		String hashByShiro = DigestUtils.hashByShiro("MD5", "123456", "testoqs", 5);
 		System.out.println(hashByShiro);
 	}
 	

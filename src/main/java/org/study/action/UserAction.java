@@ -1,12 +1,5 @@
 package org.study.action;
 
-import org.study.common.Contants;
-import org.study.common.utils.StringUtils;
-import org.study.exception.LoginException;
-import org.study.model.User;
-
-import com.opensymphony.xwork2.ActionSupport;
-
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -16,12 +9,18 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
+import org.study.common.AjaxParam;
+import org.study.common.BaseAction;
+import org.study.common.Contants;
+import org.study.common.utils.StringUtils;
+import org.study.exception.LoginException;
+import org.study.model.User;
 
 /**
  * 用户action控制类
  * 控制用户的登录，修改密码，登出操作
  */
-public class UserAction extends ActionSupport {
+public class UserAction extends BaseAction {
 
 	/**
 	 * 
@@ -38,24 +37,26 @@ public class UserAction extends ActionSupport {
 	private String checkCode;
 
 	/**
-	 * 去往登陆操作
+	 * 跳转登录jsp
 	 */
 	public String toLogin() {
 		return SUCCESS;
 	}
 
-	/* 处理登录的操作 */
-	public String dologin() {
+	/**
+	 * ajax进行登录
+	 */
+	public void dologin() {
 		boolean isEmptyData = user == null || StringUtils.isBlank(user.getLoginName()) || StringUtils.isBlank(user.getPassword());
 		if(isEmptyData) {
-			addActionError("用户名或密码为空！");
-			return LOGIN;
+			writeAjaxMessage(new AjaxParam("用户名或密码为空",false));
+			return;
 		}
 		//第一步：检验验证码
-		if(!checkCode()) {
+		/*if(!checkCode()) {
 			addActionError("验证码输入错误！");
 			return LOGIN;
-		} 
+		} */
 		
 		//第二步：使用shiro进行登录验证操作
 		try {
@@ -73,7 +74,7 @@ public class UserAction extends ActionSupport {
 		} catch (Throwable e) {
 			throw new LoginException("系统未知错误",e);
 		}
-		return SUCCESS;
+		writeAjaxMessage(new AjaxParam("登录成功",true));
 	}
 
 	/**
