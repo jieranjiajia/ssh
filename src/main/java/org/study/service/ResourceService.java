@@ -12,4 +12,7 @@ public interface ResourceService {
 	List<org.study.model.Resource> getResourceByUserid(Integer userid); 
 	
 	Set<String> getUrlsByUserid(Integer userid);
+	
+	List<org.study.model.Resource> getAllResources();
+	
 }

@@ -11,7 +11,6 @@ import org.study.model.Resource;
 public class ResourceDAOImpl extends BaseDAOImpl<Resource> implements ResourceDAO {
 
 	
-
 	@Override
 	public List<Resource> getResourceByUserid(Integer userid) {
 		String hql = "select r from Resource r,RoleResource re,UserRole ur where r.id=re.resourceid and re.roleid = ur.roleid and ur.userid = ?";

@@ -43,4 +43,5 @@ public interface BaseDAO<T> {
 	 */
 	void merger(T t);
 	
+	List<T> getAll();
 }

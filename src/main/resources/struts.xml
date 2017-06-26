@@ -66,4 +66,11 @@
 		<action name="checkCode" class="org.study.action.CheckCodeAction" method="getCheckCode"></action>
 	</package>
 	
+	<package name="resource" extends="default" namespace="/resource">
+		<action name="manager" class="org.study.action.ResourceAction" method="manager">
+			<result>/WEB-INF/resource/list.jsp</result>
+		</action>
+		<action name="list" class="org.study.action.ResourceAction" method="getResourceData"> </action>
+	</package>
+	
 </struts>

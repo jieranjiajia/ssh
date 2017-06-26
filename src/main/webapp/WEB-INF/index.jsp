@@ -18,7 +18,7 @@
     	/*zTree的初始化设置*/
     	var settings = {
     		callback : {
-    			onClick : zTreeOnclick
+    			//onClick : zTreeOnclick
     		},
     		/*设置简单格式的显示*/
     		data : {
@@ -27,6 +27,9 @@
     				idKey : "id",
     				pIdKey : "pid",
     				rootPId : null
+    			},
+    			key : {
+    				url : "url"  
     			}
     		},
     		/*设置异步加载数据*/
@@ -35,13 +38,22 @@
     			dataType : "json",
     			type : "GET",
     			url : "${ctx}/domain/indexZtree.do",
+    			dataFilter : function(treeId, parentNode, responseData) {
+    				console.info(responseData);
+    				if(responseData) {
+    					$.each(responseData,function(index,obj){
+    						//等于1时为按钮级别的，这里初始化时只初始化菜单级别的
+    						if(obj.resourceType == '1') {
+    							delete responseData[index];
+    						} else {
+    							obj.url = "${ctx}" + obj.url;
+    						}
+    					});
+    				}
+    				return responseData;
+    			}
     		}
-    	};
-    	
-    	function zTreeOnclick(event, treeid, treeNode) {
-    		console.info(treeNode);
-    	};
-    	
+    	};   	
     	$(function(){
     		indexZtree = $("#indexZtree");
     		var zTreeObj = $.fn.zTree.init(indexZtree,settings,[]);
@@ -50,6 +62,7 @@
     </script>
 </head>
 <body class="easyui-layout" data-options="fit:true">
+	<!-- 头部 -->
 	<div data-options="region:'north',split:true" style="height:100px;">
 		<p align="right" style="margin-right: 40px;">
 			<strong style="color: blue; font-size: 16px;">欢迎登录：</strong><i style="font-size: 18px;"><shiro:principal/></i>
@@ -58,6 +71,6 @@
 	<div data-options="region:'west',split:true" style="width: 260px;">
 		<ul id="indexZtree" class="ztree" style="width:220px; overflow:auto;"></ul>
 	</div>
-
+	<div data-options="region:'center',split:true"></div>
 </body>
 </html>

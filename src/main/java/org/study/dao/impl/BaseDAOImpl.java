@@ -100,6 +100,14 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 		getSession().merge(t);
 	}
 
+	@Override
+	public List<T> getAll() {
+		String sql = " from " + getEntityClass().getSimpleName();
+		return getSession().createQuery(sql).list();
+	}
+	
+	
+	//------------------动态工具方法--------------
 	/** 基本的通用的将参数动态的赋值给query */
 	public void setParamters(Query query, Object params) {
 		if(null == params) {

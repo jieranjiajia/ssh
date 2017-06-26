@@ -33,4 +33,13 @@ public class ResourceServiceImpl implements ResourceService {
 		return sets;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.study.service.ResourceService#getAllResources()
+	 * 查询所有的资源
+	 */
+	@Override
+	public List<org.study.model.Resource> getAllResources() {
+		return resourceDAO.getAll();
+	}
+
 }
